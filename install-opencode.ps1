@@ -45,5 +45,6 @@ if (($p -split ';') -notcontains $bin) {
 # Disponibiliza o comando 'opencode' ja nesta sessao
 $env:Path = "$env:Path;$bin"
 
-& $exe --version
-Write-Host "`nPronto! Rode 'opencode' em um novo terminal."
+# Abre o opencode direto (funciona mesmo chamado via powershell -c do cmd)
+& $exe
+Write-Host 'Encerrado. Nas proximas vezes, abra um NOVO terminal e digite: opencode'
