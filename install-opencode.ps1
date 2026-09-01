@@ -18,25 +18,32 @@ $bin = $base
 $tmp = Join-Path $env:TEMP 'opencode-install.zip'
 $url = "https://github.com/anomalyco/opencode/releases/latest/download/opencode-windows-$arch.zip"
 
-Write-Host "Baixando opencode ($arch)..."
-(New-Object Net.WebClient).DownloadFile($url, $tmp)
+$exe = Join-Path $bin 'opencode.exe'
+if (Test-Path $exe) {
+  Write-Host 'opencode ja esta instalado - pulando download.'
+} else {
+  Write-Host "Baixando opencode ($arch)..."
+  (New-Object Net.WebClient).DownloadFile($url, $tmp)
 
-Write-Host "Extraindo para $bin ..."
-New-Item -ItemType Directory -Force -Path $bin | Out-Null
-Remove-Item "$bin\*" -Recurse -Force -ErrorAction SilentlyContinue
-# Shell COM funciona do PS 2.0 ao 7; Expand-Archive so existe no PS 5+
-$sh = New-Object -ComObject Shell.Application
-$sh.NameSpace($bin).CopyHere($sh.NameSpace($tmp).Items(), 0x14)
+  Write-Host "Extraindo para $bin ..."
+  New-Item -ItemType Directory -Force -Path $bin | Out-Null
+  Remove-Item "$bin\*" -Recurse -Force -ErrorAction SilentlyContinue
+  # Shell COM funciona do PS 2.0 ao 7; Expand-Archive so existe no PS 5+
+  $sh = New-Object -ComObject Shell.Application
+  $sh.NameSpace($bin).CopyHere($sh.NameSpace($tmp).Items(), 0x14)
 
-if (-not (Test-Path (Join-Path $bin 'opencode.exe'))) { throw 'Falha na extracao: opencode.exe nao encontrado.' }
-Remove-Item $tmp -Force -ErrorAction SilentlyContinue
+  if (-not (Test-Path $exe)) { throw 'Falha na extracao: opencode.exe nao encontrado.' }
+  Remove-Item $tmp -Force -ErrorAction SilentlyContinue
+}
 
 $p = [Environment]::GetEnvironmentVariable('Path', 'User')
 if (($p -split ';') -notcontains $bin) {
   [Environment]::SetEnvironmentVariable('Path', "$p;$bin", 'User')
-  Write-Host "Adicionado ao PATH do usuario."
-  Write-Host ">>> FECHE ESTA JANELA e abra um terminal NOVO para usar o comando 'opencode'."
+  Write-Host 'Adicionado ao PATH do usuario (permanente).'
 }
 
-& (Join-Path $bin 'opencode.exe') --version
+# Disponibiliza o comando 'opencode' ja nesta sessao
+$env:Path = "$env:Path;$bin"
+
+& $exe --version
 Write-Host "`nPronto! Rode 'opencode' em um novo terminal."
