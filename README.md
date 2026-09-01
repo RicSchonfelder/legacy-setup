@@ -16,7 +16,7 @@ O que faz:
 
 - Detecta a arquitetura (x64 / arm64) e baixa o build **x64-baseline** — roda em CPUs antigas sem AVX2
 - Forca TLS 1.2 (necessario no Windows 7/8, que so usam TLS 1.0 por padrao)
-- Extrai em `%LOCALAPPDATA%\opencode\bin` (nao precisa de admin) e adiciona ao PATH do usuario
+- Extrai em `D:\Programas\opencode\bin` quando a pasta existir (senao usa `%LOCALAPPDATA%\opencode\bin`), sem admin, e adiciona ao PATH do usuario
 - Compativel com PowerShell 2.0+ (usa WebClient + Shell COM em vez de Invoke-RestMethod/Expand-Archive)
 
 ## Uso local (sem internet no host intermediario)

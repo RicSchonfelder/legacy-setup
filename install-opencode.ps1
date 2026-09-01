@@ -12,7 +12,9 @@ if ($pa -match 'ARM64') { $arch = 'arm64' }
 elseif ($pa -match 'AMD64') { $arch = 'x64-baseline' }  # ponytail: baseline roda em qualquer x64 (sem exigir AVX2)
 else { throw 'opencode nao suporta Windows 32-bit.' }
 
-$bin = Join-Path $env:LOCALAPPDATA 'opencode\bin'
+# Instala em D:\Programas se existir; senao, cai para o AppData do usuario
+$base = if (Test-Path 'D:\Programas') { 'D:\Programas\opencode\bin' } else { Join-Path $env:LOCALAPPDATA 'opencode\bin' }
+$bin = $base
 $tmp = Join-Path $env:TEMP 'opencode-install.zip'
 $url = "https://github.com/anomalyco/opencode/releases/latest/download/opencode-windows-$arch.zip"
 
