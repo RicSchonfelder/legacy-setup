@@ -34,7 +34,8 @@ Remove-Item $tmp -Force -ErrorAction SilentlyContinue
 $p = [Environment]::GetEnvironmentVariable('Path', 'User')
 if (($p -split ';') -notcontains $bin) {
   [Environment]::SetEnvironmentVariable('Path', "$p;$bin", 'User')
-  Write-Host "Adicionado ao PATH do usuario - abra um NOVO terminal para usar."
+  Write-Host "Adicionado ao PATH do usuario."
+  Write-Host ">>> FECHE ESTA JANELA e abra um terminal NOVO para usar o comando 'opencode'."
 }
 
 & (Join-Path $bin 'opencode.exe') --version
