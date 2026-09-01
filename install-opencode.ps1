@@ -45,6 +45,13 @@ if (($p -split ';') -notcontains $bin) {
 # Disponibiliza o comando 'opencode' ja nesta sessao
 $env:Path = "$env:Path;$bin"
 
+# Shim na pasta atual: cmd procura na pasta atual antes do PATH,
+# entao 'opencode' funciona na MESMA janela aberta antes da instalacao
+$dir = (Get-Location).Path
+if ($dir -notmatch '^[A-Za-z]:\\Windows') {
+  try { Set-Content (Join-Path $dir 'opencode.cmd') "@`"$exe`" %*" -Encoding ASCII } catch {}
+}
+
 # Abre o opencode direto (funciona mesmo chamado via powershell -c do cmd)
 & $exe
-Write-Host 'Encerrado. Nas proximas vezes, abra um NOVO terminal e digite: opencode'
+Write-Host 'Encerrado. Digite opencode para abrir de novo.'
