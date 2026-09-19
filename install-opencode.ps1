@@ -1,6 +1,9 @@
 # Instalador do opencode para Windows antigos (PowerShell 2.0+)
 # Uso remoto:  irm https://SEU-HOST/install-opencode.ps1 | iex
 # Uso local:   powershell -ExecutionPolicy Bypass -File install-opencode.ps1
+# Versao pt-BR: powershell -ExecutionPolicy Bypass -File install-opencode.ps1 -PtBr
+
+param([switch]$PtBr)
 
 $ErrorActionPreference = 'Stop'
 # Windows 7/8 so usam TLS 1.0 por padrao; GitHub exige 1.2
@@ -16,13 +19,18 @@ else { throw 'opencode nao suporta Windows 32-bit.' }
 $base = if (Test-Path 'D:\Programas') { 'D:\Programas\opencode\bin' } else { Join-Path $env:LOCALAPPDATA 'opencode\bin' }
 $bin = $base
 $tmp = Join-Path $env:TEMP 'opencode-install.zip'
-$url = "https://github.com/anomalyco/opencode/releases/latest/download/opencode-windows-$arch.zip"
-
+if ($PtBr) {
+  $url = "https://github.com/RicSchonfelder/opencode-i18n-pt/releases/download/pt-br-v1.18.31/opencode-windows-x64-ptbr.zip"
+  $sub = 'pt-br'
+} else {
+  $url = "https://github.com/anomalyco/opencode/releases/latest/download/opencode-windows-$arch.zip"
+  $sub = 'oficial'
+}
 $exe = Join-Path $bin 'opencode.exe'
 if (Test-Path $exe) {
   Write-Host 'opencode ja esta instalado - pulando download.'
 } else {
-  Write-Host "Baixando opencode ($arch)..."
+  Write-Host "Baixando opencode ($sub, $arch)..."
   (New-Object Net.WebClient).DownloadFile($url, $tmp)
 
   Write-Host "Extraindo para $bin ..."

@@ -19,6 +19,22 @@ O que faz:
 - Extrai em `D:\Programas\opencode\bin` quando a pasta existir (senao usa `%LOCALAPPDATA%\opencode\bin`), sem admin, e adiciona ao PATH do usuario
 - Compativel com PowerShell 2.0+ (usa WebClient + Shell COM em vez de Invoke-RestMethod/Expand-Archive)
 
+### Versao em Portugues (pt-BR)
+
+Para instalar a versao com a TUI traduzida para Portugues (Brasil), use a flag `-PtBr`:
+
+```powershell
+powershell -c "irm https://raw.githubusercontent.com/RicSchonfelder/legacy-setup/main/install-opencode.ps1 | iex" -PtBr
+```
+
+Localmente:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File install-opencode.ps1 -PtBr
+```
+
+A versao pt-BR e baixada do fork [RicSchonfelder/opencode-i18n-pt](https://github.com/RicSchonfelder/opencode-i18n-pt) (release `pt-br-v1.18.31`, base `v1.18.31`).
+
 ## Uso local (sem internet no host intermediario)
 
 Copie `install-opencode.ps1` para a maquina (pendrive) e rode:
